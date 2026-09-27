@@ -1,0 +1,22 @@
+[package]
+name = "lightrift"
+version = "1.0.0"
+edition = "2024"
+description = "A native League of Legends build and draft companion"
+
+[dependencies]
+eframe = { version = "0.33", default-features = false, features = ["glow", "default_fonts", "accesskit"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+reqwest = { version = "0.12", default-features = false, features = ["blocking", "json", "native-tls"] }
+image = { version = "0.25", default-features = false, features = ["png"] }
+
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.61.2", features = ["Win32_UI_Input_KeyboardAndMouse", "Win32_UI_WindowsAndMessaging", "Win32_System_Threading"] }
+
+[profile.release]
+opt-level = "s"
+lto = "thin"
+codegen-units = 1
+strip = true
+panic = "abort"
