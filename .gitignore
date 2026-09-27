@@ -1,5 +1,7 @@
 /target/
 /data/
+/dist/
+/installed.flag
 *.exe
 *.pdb
 *.log

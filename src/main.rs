@@ -8,8 +8,17 @@ mod rune_icons;
 mod sprites;
 mod ui;
 fn main() -> eframe::Result {
+    let image = image::load_from_memory(include_bytes!("../assets/lightrift.png"))
+        .expect("bundled app icon")
+        .into_rgba8();
+    let icon = eframe::egui::IconData {
+        width: image.width(),
+        height: image.height(),
+        rgba: image.into_raw(),
+    };
     let options = eframe::NativeOptions {
         viewport: eframe::egui::ViewportBuilder::default()
+            .with_icon(icon)
             .with_inner_size([1280.0, 840.0])
             .with_min_inner_size([1000.0, 680.0]),
         renderer: eframe::Renderer::Glow,

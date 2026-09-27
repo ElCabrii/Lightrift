@@ -1,12 +1,12 @@
 # Lightrift — native League companion
 
-A lightweight Windows companion for League of Legends, built in Rust with a native interface. Version 1.0 includes champion builds, runes, draft planning, live match information and three independently controlled overlays.
+A lightweight Windows companion for League of Legends, built in Rust with a native interface. Version 1.0.1 includes champion builds, runes, draft planning, live match information and three independently controlled overlays.
 
-[Download Lightrift 1.0 for Windows](https://github.com/ElCabrii/Lightrift/releases/tag/v1.0.0)
+[Download Lightrift for Windows](https://github.com/ElCabrii/Lightrift/releases/latest)
 
 ## Run
 
-Download the Windows x64 release, extract the ZIP and open `Lightrift.exe`. No installer, account, Riot developer key, Node.js, browser runtime, or backend is required. The official champion/item/rune/spell catalog and sprite images are embedded in the executable. The release currently bundles Data Dragon **16.19.1**.
+Use the **Windows setup EXE** for a standard installation with Start menu shortcut and uninstall support. Alternatively, extract the portable ZIP and open `Lightrift.exe`. No account, Riot developer key, Node.js, browser runtime, or backend is required. See [installation and upgrade instructions](docs/INSTALLATION.md). The official champion/item/rune/spell catalog and sprite images are embedded in the executable. The release currently bundles Data Dragon **16.19.1**.
 
 1. Search a champion (Ctrl+K) or filter by champion class. Stars mark favorites.
    In **Recommended**, choose a lane and **Find builds**. Click a core-item row to compare published three-item paths, with each option's win rate, pick rate and sample size. **Save selected build** adds a separate editable local variant and opens the editor; it does not modify League. Runes, spells, skills, starting items and boots remain the shared service recommendation. Boots are copied into Situational for you to place in your purchase plan.
@@ -43,11 +43,11 @@ Tier lists, matchup scores, remote profiles/match histories, automated picks, re
 
 Delete a saved variant from its **Playbook** card, then confirm **Delete build**. Deletion removes only that local variant and its active selection reference. If it is open in the editor, Lightrift switches to another saved variant or a new blank build, preventing autosave from restoring the deleted entry. League rune pages and item sets are unaffected.
 
-Saved builds and preferences live in `data/settings.json` beside the executable, cached abilities in `data/cache/<patch>/`, and provider results in `data/recommendations/`. Keep the folder writable. No credentials are persisted. Older saves migrate automatically; the exact skill-sequence format from older OP.GG notes is extracted without changing those notes. The first 0.4 save backs up existing settings as `data/settings-before-0.4.json`. Previous backups remain untouched. Close old Lightrift versions before running the upgrade to avoid competing saves. A malformed settings file is preserved and saving is disabled until repaired. Exit autosave is best effort; use Save before closing.
+The portable edition stores settings and caches in `data/` beside the executable. The installed edition uses `%LOCALAPPDATA%\Lightrift`. Settings displays the active path. Keep that folder writable. No credentials are persisted. Older saves migrate automatically; the exact skill-sequence format from older OP.GG notes is extracted without changing those notes. The first 0.4 save backs up existing settings as `data/settings-before-0.4.json`. Previous backups remain untouched. Close old Lightrift versions before running the upgrade to avoid competing saves. A malformed settings file is preserved and saving is disabled until repaired. Exit autosave is best effort; use Save before closing.
 
 ## Upgrading from Rift
 
-Close Rift before launching Lightrift. Copy your existing `data` folder beside `Lightrift.exe` to keep your builds, favorites and preferences. Lightrift recognizes existing Rift temporary/named rune pages; item-set IDs stay compatible. Your data folder is never included in public releases.
+Close Rift before launching Lightrift. For portable use, copy your existing `data` folder beside `Lightrift.exe`. For the installed edition, copy its contents to `%LOCALAPPDATA%\Lightrift` before first launch. This keeps your builds, favorites and preferences. Lightrift recognizes existing Rift temporary/named rune pages; item-set IDs stay compatible. Your data folder is never included in public releases.
 
 ## Development
 
@@ -61,7 +61,7 @@ cargo clippy --release --locked
 
 The project uses `eframe`/`egui` with OpenGL and no embedded webview. Textures come from 16 embedded sprite atlases and individual rune icons. Lists virtualize visible rows. Automatic overlays poll the local client every two seconds. Live polls every two seconds during champion select and games, and five seconds otherwise. In-game reads use the local Live Client Data API only when Live is open or background following is enabled. Separate local-client and recommendation workers keep provider latency away from draft updates. No LLM, MCP SDK or JavaScript runtime is used in the app; the public service is called directly over HTTPS.
 
-The delivered executable was built with the Windows GNU toolchain and w64devkit 2.10. A normal MSVC Rust installation can use the Cargo commands above with Visual Studio C++ build tools. No compiler is required to run the executable.
+The delivered executable was built with the Windows GNU toolchain and w64devkit 2.10. A normal MSVC Rust installation can use the Cargo commands above from a Visual Studio developer shell with the Windows SDK resource compiler available. GNU builds also require windres on PATH. No compiler is required to run the executable.
 
 `Cargo.lock` pins dependencies. The data refresh process and future service design are described in `docs/ARCHITECTURE.md`.
 

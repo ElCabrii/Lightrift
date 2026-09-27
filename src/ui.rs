@@ -609,7 +609,7 @@ impl Lightrift {
                     ui.add_space(6.0);
                 }
                 ui.with_layout(egui::Layout::bottom_up(egui::Align::Center), |ui| {
-                    ui.label(RichText::new("LIGHTRIFT 1.0").size(9.0).color(MUTED));
+                    ui.label(RichText::new("LIGHTRIFT 1.0.1").size(9.0).color(MUTED));
                     ui.add_space(16.0);
                     if design::nav(ui, 4, "Settings", self.page == Page::Settings).clicked() {
                         self.page = Page::Settings;
@@ -2193,9 +2193,10 @@ if ui.add_enabled(!self.pending,egui::Button::new("Test connection")).clicked(){
                 );
                 ui.add_space(10.0);
                 ui.label(
-                    RichText::new(
-                        "Back up the data folder beside Lightrift.exe to keep your playbook.",
-                    )
+                    RichText::new(format!(
+                        "Back up your data folder to keep your playbook:\n{}",
+                        data_dir().display()
+                    ))
                     .size(12.0)
                     .color(MUTED),
                 );
@@ -2211,7 +2212,7 @@ if ui.add_enabled(!self.pending,egui::Button::new("Test connection")).clicked(){
         });
         ui.add_space(16.0);
         ui.label(
-            RichText::new("LIGHTRIFT / 1.0")
+            RichText::new("LIGHTRIFT / 1.0.1")
                 .size(13.0)
                 .strong()
                 .color(MINT),

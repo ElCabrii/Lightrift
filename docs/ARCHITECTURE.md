@@ -1,6 +1,6 @@
 # Architecture
 
-Lightrift is a native Rust application built with eframe/egui and OpenGL. It has no browser runtime or hosted backend. Catalogs and textures are embedded; preferences, builds and recommendation caches stay beside the executable in data/.
+Lightrift is a native Rust application built with eframe/egui and OpenGL. It has no browser runtime or hosted backend. Catalogs and textures are embedded; portable preferences, builds and recommendation caches stay beside the executable in data/. The installer adds installed.flag, selecting LOCALAPPDATA/Lightrift instead. User data is never placed in the installed program directory.
 
 - ui.rs owns navigation, editor state and playbook persistence. ui/design.rs provides shared native controls. ui/live.rs renders draft and match views, and ui/overlay.rs owns three independent viewports.
 - data.rs validates builds and creates League import payloads. Stable build IDs distinguish same-name variants. Deletion persists a cloned settings snapshot before changing editor state and clears active references.

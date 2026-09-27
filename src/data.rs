@@ -366,11 +366,21 @@ impl Settings {
     }
 }
 pub fn data_dir() -> PathBuf {
-    std::env::current_exe()
-        .unwrap_or_default()
-        .parent()
-        .unwrap_or(Path::new("."))
-        .join("data")
+    let exe = std::env::current_exe().unwrap_or_default();
+    let directory = exe.parent().unwrap_or(Path::new("."));
+    resolve_data_dir(
+        directory,
+        directory.join("installed.flag").is_file(),
+        std::env::var_os("LOCALAPPDATA")
+            .map(PathBuf::from)
+            .as_deref(),
+    )
+}
+fn resolve_data_dir(directory: &Path, installed: bool, local: Option<&Path>) -> PathBuf {
+    if installed && let Some(local) = local {
+        return local.join("Lightrift");
+    }
+    directory.join("data")
 }
 pub fn load_settings() -> Result<Settings, String> {
     let path = data_dir().join("settings.json");
@@ -426,6 +436,20 @@ pub fn plain(s: &str) -> String {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn installed_storage_is_separate_from_portable_data_and_binaries() {
+        let exe = std::path::Path::new("application");
+        let local = std::path::Path::new("profile");
+        assert_eq!(
+            super::resolve_data_dir(exe, true, Some(local)),
+            local.join("Lightrift")
+        );
+        assert_eq!(
+            super::resolve_data_dir(exe, false, Some(local)),
+            exe.join("data")
+        );
+        assert_eq!(super::resolve_data_dir(exe, true, None), exe.join("data"));
+    }
     #[test]
     fn deletion_uses_id_and_clears_active_selection_across_reload() {
         let c = super::Catalog::load();
